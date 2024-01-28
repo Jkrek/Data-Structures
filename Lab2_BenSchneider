@@ -1,0 +1,241 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Player {
+public:
+    //Constructor
+    Player(string n) {
+        name = n;
+        shotsTaken = 0;
+        shotsMade = 0;
+        passesAttempted = 0;
+        passesMade = 0;
+    }
+    //PassBall function
+    bool PassBall() {
+        double passPctg = 0;
+        //Avoid divide by 0 errors
+        if (passesMade > 0 && passesAttempted > 0) {
+            passPctg = (double)passesAttempted / passesMade;
+        }
+        else {
+            passPctg = 0;
+        }
+        passesAttempted++;
+        if ((1 + (rand() % 100)) > (passPctg + 50)) {
+            return false;
+        }
+        else {
+            passesMade++;
+            return true;
+        }
+    }
+    //TakeShot function
+    int TakeShot(int ptsToAttempt) {
+        double shotPctg = 0;
+        //Avoid divide by 0 errors
+        if (shotsMade > 0 && shotsTaken > 0) {
+            shotPctg = (double)shotsTaken / shotsMade;
+        }
+        else {
+            shotPctg = 0;
+        }
+        shotsTaken++;
+        int chance;
+        //Calculates the chance based on the ptsToAttempt
+        if (ptsToAttempt == 1) {
+            chance = (1 + (rand() % 70));
+        }
+        else if (ptsToAttempt == 2) {
+            chance = (1 + (rand() % 100));
+        }
+        else {
+            chance = (1 + (rand() % 125));
+        }
+        if (chance < (shotPctg + 50)) {
+            shotsMade++;
+            return ptsToAttempt;
+        }
+        else {
+            return 0;
+        }
+    }
+    string getName() {
+        return name;
+    }
+    int getShotsTaken() {
+        return shotsTaken;
+    }
+    int getShotsMade() {
+        return shotsMade;
+    }
+    int getPassesAttempted() {
+        return passesAttempted;
+    }
+    int getPassesMade() {
+        return passesMade;
+    }
+
+private:
+    string name;
+    int shotsTaken;
+    int shotsMade;
+    int passesAttempted;
+    int passesMade;
+};
+
+//showPlayerStats outputs stats for each player
+void showPlayerStats(Player p) {
+    cout << "Stats for " << p.getName() << ":\n";
+    cout << "Shots taken: " << p.getShotsTaken() << "\n";
+    cout << "Shots made: " << p.getShotsMade() << "\n";
+    cout << "Passes attempted: " << p.getPassesAttempted() << "\n";
+    cout << "Passes made: " << p.getPassesMade() << "\n";
+}
+
+//showScore displays the score and possessions remaining of each team
+void showScore(int score1, int score2, int possessions1, int possessions2) {
+    cout << "Our team score: " << score1 << "\n";
+    cout << "Enemy team score: " << score2 << "\n";
+    cout << "Our possessions remaining: " << possessions1 << "\n";
+    cout << "Their possessions remaining: " << possessions2 << "\n";
+}
+
+//enemyTeamPossession determines whether the enemy team scores on their possession
+//and adjusts the score and possession values accordingly
+void enemyTeamPossession(int &possessions2, int &score2) {
+    int randNum = 0;
+    int randNum2 = 0;
+    bool inPossession = true;
+    cout << endl;
+    while (inPossession) {
+        randNum = (1 + (rand() % 10));
+        randNum2 = (1 + (rand() % 10));
+        //60% chance to make their shot, always worth 2 pts
+        if (randNum <= 6) {
+            cout << "Enemy team made a shot worth 2 pts.\n";
+            possessions2--;
+            score2 += 2;
+            inPossession = false;
+        }
+        //40% chance to miss their shot
+        else {
+            //50% chance to secure the rebound
+            if (randNum2 <= 5) {
+                cout << "Enemy team missed their shot and secured the rebound.\n";
+            }
+            //50% chance to miss the rebound
+            else {
+                cout << "Enemy team missed their shot and missed the rebound.\n";
+                possessions2--;
+                inPossession = false;
+            }
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    Player players[5] = { Player("P1"), Player("P2"), Player("P3"), Player("P4"), Player("P5") };
+
+    int score1 = 0;
+    int score2 = 0;
+    int possessions1 = 30;
+    int possessions2 = 30;
+    int ptsToAttempt = 0;
+    int passTo = 0;
+    int pointsToAttempt1 = 0;
+    bool success = true;
+    int randNum = 0;
+    int option = 0;
+
+    //Determines random index for starting player
+    int i = rand() % 5;
+
+    //Game loop
+    while ((possessions1 > 0) or (possessions2 > 0)) {
+        cout << players[i].getName() << " has the ball.\n";
+        cout << "Choose an option:\n";
+        cout << "1. Shoot\n";
+        cout << "2. Pass\n";
+        cout << "3. See player stats\n";
+        cout << "4. See score\n";
+
+        cin >> option;
+
+        switch (option) {
+        //Shoot
+        case 1:
+            cout << "How many points would you like to shoot for? (1, 2, or 3): ";
+            cin >> ptsToAttempt;
+            
+            //Calls TakeShot function
+            pointsToAttempt1 = players[i].TakeShot(ptsToAttempt);
+            
+            //If misses shot
+            if (pointsToAttempt1 == 0) {
+                randNum = (1 + (rand() % 10));
+                //50% chance to miss the rebound
+                if (randNum <= 5) {
+                    cout << "Missed the shot and missed the rebound. Enemy team's possession.\n";
+                    possessions1--;
+                    enemyTeamPossession(possessions2, score2);
+                    i = rand() % 5;
+                    break;
+                //50% chance to get the rebound
+                }
+                else {
+                    cout << "Missed the shot and secured the rebound. Our possession.\n";
+                    break;
+                }
+            }
+            //If the shot is made
+            cout << "Scored " << pointsToAttempt1 << " points. Enemy team's possession.\n";
+            score1 += pointsToAttempt1;
+            possessions1--;
+            enemyTeamPossession(possessions2, score2);
+            i = rand() % 5;
+            break;
+        //Pass
+        case 2:
+            cout << "Who would you like to pass to?\n1. " << players[0].getName() << "\n2. " <<
+                players[1].getName() << "\n3. " << players[2].getName() << "\n4. " <<
+                players[3].getName() << "\n5. " << players[4].getName();
+            cin >> passTo;
+            success = players[i].PassBall();
+            if (success) {
+                cout << "Pass successful.\n";
+                i = passTo - 1;
+            }
+            else {
+                cout << "Pass failed.\n";
+                possessions1--;
+                enemyTeamPossession(possessions2, score2);
+                i = rand() % 5;
+                break;
+            }
+            break;
+        //Show player stats
+        case 3:
+            for (int i = 0; i < 5; i++) {
+                showPlayerStats(players[i]);
+            }
+            cout << endl;
+            break;
+        //Show score
+        case 4:
+            showScore(score1, score2, possessions1, possessions2);
+            cout << endl;
+            break;
+        //Checks for invalid input
+        default:
+            cout << "Invalid option. Please choose a number from 1 to 4.\n";
+            break;
+        }
+    }
+
+    cout << "Game over.\n";
+    cout << "Final score: " << score1 << " to " << score2;
+    return 0;
+}
