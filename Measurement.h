@@ -1,0 +1,38 @@
+#pragma once
+
+#include<string>
+#include<iostream>
+#ifndef Measurement_H
+#define Measurement_H
+
+#endif
+
+class new_standard {
+
+private:
+	int little;
+	int lots;
+	int heaps;
+
+public:
+	int getLittle() const;
+	int getLots() const;
+	int getHeaps() const;
+
+	void setLittle(int);
+	void setLots(int);
+	void setHeaps(int);
+
+	new_standard(int little, int lots, int heaps);
+	new_standard(int little);
+	new_standard();
+
+
+	friend new_standard operator+(const new_standard& arg1, const new_standard& arg2);
+	friend new_standard operator-(const new_standard& arg1, const new_standard& arg2);
+	friend new_standard operator*(const new_standard& arg1, const new_standard& arg2);
+	friend new_standard operator/(const new_standard& arg1, const new_standard& arg2);
+	friend bool operator==(const new_standard& arg1, const new_standard& arg2);
+	operator string() const ;
+
+};
