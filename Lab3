@@ -1,0 +1,147 @@
+
+#include <iostream>
+#include "Measurement.h"
+using namespace std;
+
+int new_standard::getLittle()const {
+	return little;
+};
+int new_standard::getLots() const {
+	return lots;
+};
+int new_standard:: getHeaps()const {
+	return heaps;
+}
+
+
+void new_standard::setLittle(int l) {
+	if (l >= 0)
+	{
+		little = l;
+	}
+	else {
+		cout << "Invalid value\n";
+	}
+
+
+}
+
+void new_standard::setLots(int x) {
+	if (x >= 0)
+	{
+		lots = x;
+	}
+	else {
+		cout << "Invalid value\n";
+	}
+
+}
+void new_standard::setHeaps(int h) {
+	if (h >= 0)
+	heaps = h;
+	}
+	else {
+		cout << "Invalid value\n";
+	}
+}
+
+
+
+//constructors
+new_standard::new_standard(int l, int x, int h) {
+	little = l;
+	lots = x;
+	heaps = h;
+}
+
+new_standard::new_standard(int l) {
+	little = l;
+	lots = 0;
+	heaps = 0;
+}
+
+
+new_standard::new_standard() {
+	little = 0;
+	lots = 0;
+	heaps = 0;
+}
+
+new_standard operator+(const new_standard& arg1, const new_standard& arg2) {
+
+	int temp_little = (arg1.little + arg2.little);
+	int temp_lots = (arg1.lots + arg2.lots);
+	int temp_heaps = (arg1.heaps + arg2.heaps);
+
+	int extra_little = floor(temp_little / 7);
+	temp_lots += extra_little;
+	temp_little -= extra_little * 7;	
+
+	int extra_lots = floor(temp_lots / 23);
+	temp_heaps += extra_lots;
+	temp_lots -= extra_lots * 23;
+
+	return (temp_little, temp_lots, temp_heaps)
+
+}
+	  
+new_standard operator-(const new_standard& arg1, const new_standard& arg2) {
+
+	int temp_little = (arg1.little - arg2.little);
+	int temp_lots = (arg1.lots - arg2.lots);
+	int temp_heaps = (arg1.heaps - arg2.heaps);
+
+	int extra_little = floor(temp_little / 7);
+	temp_lots -= extra_little;
+	temp_little -= extra_little * 7;
+
+	int extra_lots = floor(temp_lots / 23);
+	temp_heaps += extra_lots;
+	temp_lots -= extra_lots * 23;
+
+	return (temp_little, temp_lots, temp_heaps)
+}
+new_standard operator*(const new_standard& arg1, const new_standard& arg2) {
+
+
+	int temp_little = (arg1.little * arg2.little);
+	int temp_lots = (arg1.lots * arg2.lots);
+	int temp_heaps = (arg1.heaps * arg2.heaps);
+
+	int extra_little = floor(temp_little / 7);
+	temp_lots += extra_little;
+	temp_little -= extra_little * 7;
+
+	int extra_lots = floor(temp_lots / 23);
+	temp_heaps += extra_lots;
+	temp_lots -= extra_lots * 23;
+
+}
+new_standard operator/(const new_standard& arg1, const new_standard& arg2) {
+
+	int temp_little = (arg1.little / arg2.little);
+	int temp_lots = (arg1.lots / arg2.lots);
+	int temp_heaps = (arg1.heaps / arg2.heaps);
+
+	int extra_little = floor(temp_little / 7);
+	temp_lots += extra_little;
+	temp_little -= extra_little * 7;
+
+	int extra_lots = floor(temp_lots / 23);
+	temp_heaps += extra_lots;
+	temp_lots -= extra_lots * 23;
+
+}
+
+bool operator==(const new_standard& arg1, const new_standard& arg2) {
+
+
+}
+
+
+int main()
+{
+  
+
+
+}
