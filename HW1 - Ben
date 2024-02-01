@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <cstring>
+using namespace std;
+
+// A structure to store the information of a file
+struct Book {
+    string title;
+    string author;
+    int wordCount;
+    int letterFrequency[26];
+    int lineCount;
+};
+
+//Reads file and returns a Book object
+Book readFile(string fileName, ifstream &input) {
+    Book info;
+    //Reads the title and author
+    getline(input, info.title);
+    getline(input, info.author);
+    //Initializes the word count, letter frequency, and line count to 0
+    info.wordCount = 0;
+    for (int i = 0; i < 26; i++) {
+        info.letterFrequency[i] = 0;
+    }
+    info.lineCount = 0;
+    //Reads the rest of the file
+    string line;
+    while (getline(input, line)) {
+        info.lineCount++;
+        //Split the line into words by spaces (researched online to find help)
+        stringstream ss(line);
+        string word;
+        while (ss >> word) {
+            info.wordCount++;
+            //Updates letter freq for each word
+            for (char c : word) {
+                c = toupper(c); //Convert everything to uppercase to avoid missing letters
+                if (c >= 'A' && c <= 'Z') { //Check if it is a letter
+                    info.letterFrequency[c - 'A']++; //Adds to list
+                }
+            }
+        }
+    }
+    input.close();
+    return info;
+}
+
+// A function to write the Book object's information to a file named CardCatalog
+void writeFile(Book info, string fileName) {
+    ofstream output(fileName, ios::app); //Append mode
+    //Write the information to file and separate by line
+    output << "Title: " << info.title << "\n";
+    output << "Author: " << info.author << "\n";
+    output << "Word count: " << info.wordCount << "\n";
+    output << "Line count: " << info.lineCount << "\n";
+    output << endl;
+    output.close();
+}
+
+//Displays the letter frequency
+void displayLetterFrequency(Book info) {
+    cout << "The letter frequency of " << info.title << " by " << info.author << " is:\n";
+    for (int i = 0; i < 26; i++) {
+        cout << char('A' + i) << ": " << info.letterFrequency[i] << "\n";
+    }
+}
+
+//Main function
+int main() {
+    string fileName; //Name of file being processed
+    char choice; //User's choice to see the letter frequency or process another file
+    bool exit = false; //If the program is done
+    while (!exit) {
+        cout << "Enter the name of the file to be processed: ";
+        cin >> fileName;
+        ifstream input;
+        input.open(fileName);
+        while (!input.is_open()) {
+            cout << "Invalid file name. Try again: ";
+            cin >> fileName;
+            input.open(fileName);
+        }
+        Book info = readFile(fileName, input);
+        writeFile(info, "CardCatalog.txt");
+        cout << "Do you want to see the letter frequency? (Y/N): ";
+        cin >> choice;
+        if (toupper(choice) == 'Y') {
+            displayLetterFrequency(info);
+        }
+        cout << "Do you want to process another file? (Y/N): ";
+        cin >> choice;
+        if (toupper(choice) == 'N') {
+            //Quits program
+            exit = true;
+        }
+    }
+    return 0;
+}
