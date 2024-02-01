@@ -1,1 +1,23 @@
+#include <iostream>
+#include <fstream>
+#include <string>
 
+using namespace std;
+//Structure that stores all info from file
+struct BookInfo {
+    string title;
+    string authorFirstName;
+    string authorLastName;
+    int wordCount{0};
+    int letterFrequency[26] = {0}; 
+    int lineCount {0};
+};
+
+BookInfo processFile(const string& fileName) {
+    ifstream file(fileName);
+    BookInfo bookInfo;
+
+    if (!file) {
+        cout << "Error opening file: " << fileName << endl;
+        return bookInfo; 
+    }
