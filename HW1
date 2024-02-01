@@ -3,21 +3,63 @@
 #include <string>
 
 using namespace std;
+
+//Jared, Ben, Ori- Group 16 
+
+
 //Structure that stores all info from file
 struct BookInfo {
     string title;
     string authorFirstName;
     string authorLastName;
-    int wordCount{0};
+    int wordCount = 0;
     int letterFrequency[26] = {0}; 
-    int lineCount {0};
+    int lineCount = 0;
 };
 
 BookInfo processFile(const string& fileName) {
     ifstream file(fileName);
     BookInfo bookInfo;
-
+//OUtput message to prompt another file (2.)
     if (!file) {
         cout << "Error opening file: " << fileName << endl;
         return bookInfo; 
     }
+
+    getline(file, bookInfo.title); 
+    string fullName;
+
+    getline(file, fullName); 
+    size_t spacePos = fullName.find(' ');
+    //https://www.geeksforgeeks.org/stringnpos-in-c-with-examples/
+    //Siting source that describes npos as it helps determine 'until the end of the string'
+    if (spacePos != string::npos) {
+        bookInfo.authorFirstName = fullName.substr(0, spacePos);
+        bookInfo.authorLastName = fullName.substr(spacePos + 1);
+    }
+//This while loop counts the lines and reads from file
+    string line;
+    while (getline(file, line)) {
+        ++bookInfo.lineCount;
+        bool inWord = false;
+        for (char& ch : line) {
+            if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
+                if (ch >= 'A' && ch <= 'Z') {
+                    ch += 'a' - 'A'; 
+                }
+                ++bookInfo.letterFrequency[ch - 'a'];
+
+
+            //Counts word count of document
+                if (!inWord) {
+                    inWord = true;
+                    ++bookInfo.wordCount;
+                }
+            } else {
+                inWord = false;
+            }
+        }
+    }
+    file.close();
+    return bookInfo;
+}
