@@ -4,56 +4,60 @@
 
 using namespace std;
 
-//Jared, Ben, Ori- Group 16 
+// Jared, Ben, Ori- Group 16 
 
-
-//Structure that stores all info from file
-struct BookInfo {
+// Structure that stores all info from file
+struct FileInfo {
     string title;
-    string authorFirstName;
-    string authorLastName;
+    string firstName;
+    string lastName;
     int wordCount = 0;
     int letterFrequency[26] = {0}; 
     int lineCount = 0;
 };
 
-BookInfo processFile(const string& fileName) {
+FileInfo processFile(const string& fileName) {
     ifstream file(fileName);
-    BookInfo bookInfo;
-//OUtput message to prompt another file (2.)
+    FileInfo fileInfo; 
+//OUtput message to prompt another file
     if (!file) {
         cout << "Error opening file: " << fileName << endl;
-        return bookInfo; 
+        return fileInfo; 
     }
 
-    getline(file, bookInfo.title); 
+    getline(file, fileInfo.title); 
     string fullName;
 
     getline(file, fullName); 
     size_t spacePos = fullName.find(' ');
+
+    //Citing source that describes npos and spacePos as it helps determine 'until the end of the string'
     //https://www.geeksforgeeks.org/stringnpos-in-c-with-examples/
-    //Siting source that describes npos as it helps determine 'until the end of the string'
     if (spacePos != string::npos) {
-        bookInfo.authorFirstName = fullName.substr(0, spacePos);
-        bookInfo.authorLastName = fullName.substr(spacePos + 1);
+        fileInfo.firstName = fullName.substr(0, spacePos);
+        fileInfo.lastName = fullName.substr(spacePos + 1);
     }
+
 //This while loop counts the lines and reads from file
     string line;
     while (getline(file, line)) {
-        ++bookInfo.lineCount;
+        ++fileInfo.lineCount;
         bool inWord = false;
+//checks to see if character is upper case or lower case for the ranges
         for (char& ch : line) {
             if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
+
                 if (ch >= 'A' && ch <= 'Z') {
                     ch += 'a' - 'A'; 
                 }
-                ++bookInfo.letterFrequency[ch - 'a'];
+
+                ++fileInfo.letterFrequency[ch - 'a'];
 
 
-            //Counts word count of document
+//counts word count of document/file
                 if (!inWord) {
                     inWord = true;
-                    ++bookInfo.wordCount;
+                    ++fileInfo.wordCount;
                 }
             } else {
                 inWord = false;
@@ -61,5 +65,61 @@ BookInfo processFile(const string& fileName) {
         }
     }
     file.close();
-    return bookInfo;
+    return fileInfo;
 }
+
+
+//saves info taken from file to file CardCatalog.txt
+void writeToCardCatalog(const FileInfo& fileInfo) {
+
+    //Using ios::app to append to end of file
+    ofstream cardCatalog("CardCatalog.txt", ios::app);
+
+    cardCatalog << "Title: " << fileInfo.title << "\n";
+    cardCatalog << "Full Author: " << fileInfo.firstName << " " << fileInfo.lastName << "\n";
+    cardCatalog << "Word count: " << fileInfo.wordCount << "\n";
+    cardCatalog << "Line count: " << fileInfo.lineCount << "\n\n";
+
+    cardCatalog.close();
+}
+
+void displayLetterFrequency(const FileInfo& fileInfo) {
+
+    //5. Calculates and shows frequency of each letter if prompted
+    cout << fileInfo.title << " letter frequency:\n";
+    for (int i = 0; i < 26; ++i) {
+        double percentage = (static_cast<double>(fileInfo.letterFrequency[i]) / fileInfo.wordCount) * 100;
+        cout << char('a' + i) << ": " << percentage << "%\n";
+    }
+}
+
+int main() {
+
+
+    string fileName;
+    char processAnother = 'y';
+    //Citing source that helps convert uppercase to lower case if user enters input incorrectly
+//https://www.ibm.com/docs/en/i/7.1?topic=functions-tolower-toupper-convert-character-case
+    while (tolower(processAnother) == 'y') {
+        cout << "Enter the name of the file: ";
+        cin >> fileName;
+
+        FileInfo fileInfo = processFile(fileName);
+        if (fileInfo.wordCount > 0) { 
+            writeToCardCatalog(fileInfo);
+
+            char displayFrequency;
+            cout << "Do you want to see the letter frequency? (y/n): ";
+            cin >> displayFrequency;
+            if (tolower(displayFrequency) == 'y') {
+                displayLetterFrequency(fileInfo);
+            }
+        }
+
+        cout << "Do you want to continue? (y/n): ";
+        cin >> processAnother;
+    }
+
+    return 0;
+}
+
