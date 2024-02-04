@@ -34,7 +34,7 @@ public:
 	friend new_standard operator/(const new_standard& arg1, const new_standard& arg2);
 	friend bool operator==(const new_standard& arg1, const new_standard& arg2);
 	friend ostream& operator<< (ostream& os, const new_standard& ans);
-	//friend ostream& operator<< (ostream& os, const new_standard& arg2);
+	
 
 };
 
