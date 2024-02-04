@@ -183,7 +183,7 @@ bool operator==(const new_standard& arg1, const new_standard& arg2) {
 		arg1.getHeaps() == arg2.getHeaps());
 
 }
-
+//for this ostream thing here is the source : https://stackoverflow.com/questions/28142239/overloading-ostream-operator-returning-address also https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt2
 ostream& operator<<(ostream& os, const new_standard& ans) {
 	os  << "Little: "<< ans.getLittle()
 		<< "Lots: " << ans.getLots()
