@@ -80,14 +80,16 @@ new_standard operator+(const new_standard& arg1, const new_standard& arg2) {
 	temp_lots += extra_little;
 	temp_little -= extra_little * 7;
 
-	int extra_lots = floor(temp_lots / 23);
-	temp_heaps += extra_lots;
-	temp_lots -= extra_lots * 23;
-	
 	if (temp_little >= 7) {
 		temp_lots += temp_little / 7;
 		temp_little %= 7;
 	}
+
+	int extra_lots = floor(temp_lots / 23);
+	temp_heaps += extra_lots;
+	temp_lots -= extra_lots * 23;
+	
+	
 	if (temp_lots >= 23) {
 		temp_heaps += temp_lots / 23;
 		temp_lots %= 23;
@@ -108,13 +110,15 @@ new_standard operator-(const new_standard& arg1, const new_standard& arg2) {
 	temp_lots -= extra_little;
 	temp_little -= extra_little * 7;
 
+	if (temp_little >= 7) {
+		temp_lots += temp_little / 7;
+		temp_little %= 7;
+
 	int extra_lots = floor(temp_lots / 23);
 	temp_heaps += extra_lots;
 	temp_lots -= extra_lots * 23;
 
-	if (temp_little >= 7) {
-		temp_lots += temp_little / 7;
-		temp_little %= 7;
+	
 	}
 	if (temp_lots >= 23) {
 		temp_heaps += temp_lots / 23;
@@ -134,14 +138,17 @@ new_standard operator*(const new_standard& arg1, const new_standard& arg2) {
 	temp_lots += extra_little;
 	temp_little -= extra_little * 7;
 
-	int extra_lots = floor(temp_lots / 23);
-	temp_heaps += extra_lots;
-	temp_lots -= extra_lots * 23;
 
 	if (temp_little >= 7) {
 		temp_lots += temp_little / 7;
 		temp_little %= 7;
 	}
+
+	int extra_lots = floor(temp_lots / 23);
+	temp_heaps += extra_lots;
+	temp_lots -= extra_lots * 23;
+
+	
 	if (temp_lots >= 23) {
 		temp_heaps += temp_lots / 23;
 		temp_lots %= 23;
@@ -160,14 +167,16 @@ new_standard operator/(const new_standard& arg1, const new_standard& arg2) {
 	temp_lots += extra_little;
 	temp_little -= extra_little * 7;
 
-	int extra_lots = floor(temp_lots / 23);
-	temp_heaps += extra_lots;
-	temp_lots -= extra_lots * 23;
-
 	if (temp_little >= 7) {
 		temp_lots += temp_little / 7;
 		temp_little %= 7;
 	}
+
+	int extra_lots = floor(temp_lots / 23);
+	temp_heaps += extra_lots;
+	temp_lots -= extra_lots * 23;
+
+	
 	if (temp_lots >= 23) {
 		temp_heaps += temp_lots / 23;
 		temp_lots %= 23;
@@ -183,7 +192,8 @@ bool operator==(const new_standard& arg1, const new_standard& arg2) {
 		arg1.getHeaps() == arg2.getHeaps());
 
 }
-//for this ostream thing here is the source : https://stackoverflow.com/questions/28142239/overloading-ostream-operator-returning-address also https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt2
+//for this ostream thing here is the source : https://stackoverflow.com/questions/28142239/overloading-ostream-operator-returning-address 
+//also https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt2
 ostream& operator<<(ostream& os, const new_standard& ans) {
 	os  << "Little: "<< ans.getLittle()
 		<< "Lots: " << ans.getLots()
@@ -266,3 +276,4 @@ int main()
 	
 	return 0;
 }
+
