@@ -69,7 +69,7 @@ new_standard::new_standard() {
 	lots = 0;
 	heaps = 0;
 }
-
+//operator overload for +
 new_standard operator+(const new_standard& arg1, const new_standard& arg2) {
 
 	int temp_little = (arg1.getLittle() + arg2.getLittle());
@@ -79,7 +79,8 @@ new_standard operator+(const new_standard& arg1, const new_standard& arg2) {
 	int extra_little = floor(temp_little / 7);
 	temp_lots += extra_little;
 	temp_little -= extra_little * 7;
-
+	
+//check conditions for when littles are >=7 and when lots are >=23
 	if (temp_little >= 7) {
 		temp_lots += temp_little / 7;
 		temp_little %= 7;
@@ -99,7 +100,7 @@ new_standard operator+(const new_standard& arg1, const new_standard& arg2) {
 	return new_standard(temp_little, temp_lots, temp_heaps);
 
 }
-	  
+//operator overload for -	  
 new_standard operator-(const new_standard& arg1, const new_standard& arg2) {
 
 	int temp_little = (arg1.getLittle() - arg2.getLittle());
@@ -127,6 +128,7 @@ new_standard operator-(const new_standard& arg1, const new_standard& arg2) {
 
 	return new_standard(temp_little, temp_lots, temp_heaps);
 }
+//operator overload for *
 new_standard operator*(const new_standard& arg1, const new_standard& arg2) {
 
 
@@ -157,6 +159,7 @@ new_standard operator*(const new_standard& arg1, const new_standard& arg2) {
 	return new_standard(temp_little, temp_lots, temp_heaps);
 
 }
+//operator overload for /
 new_standard operator/(const new_standard& arg1, const new_standard& arg2) {
 
 	int temp_little = (arg1.getLittle() / arg2.getLittle());
@@ -185,13 +188,14 @@ new_standard operator/(const new_standard& arg1, const new_standard& arg2) {
 	return new_standard(temp_little, temp_lots, temp_heaps);
 
 }
-
+//operator overload for ==
 bool operator==(const new_standard& arg1, const new_standard& arg2) {
 	return (arg1.getLittle() == arg2.getLittle()
 		&& arg1.getLots() == arg2.getLots() && 
 		arg1.getHeaps() == arg2.getHeaps());
 
 }
+//operator overload for string
 //for this ostream thing here is the source : https://stackoverflow.com/questions/28142239/overloading-ostream-operator-returning-address 
 //also https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt2
 ostream& operator<<(ostream& os, const new_standard& ans) {
@@ -205,7 +209,7 @@ ostream& operator<<(ostream& os, const new_standard& ans) {
 int main()
 {
 	bool continue_operations = true;
-
+// loop to ask user if he wants to continue
 	while (continue_operations) {
 		new_standard values_user1;
 		new_standard values_user2;
@@ -223,7 +227,8 @@ int main()
 		cout << "Little:"; cin >> val_little1;
 		cout << "Lots:"; cin >> val_lot1;
 		cout << "Heap:"; cin >> val_heap1;
-
+		
+// setting littles, lots and heaps from user input
 		values_user1.setLittle(val_little1);
 		values_user1.setLots(val_lot1);
 		values_user1.setHeaps(val_heap1);
@@ -240,7 +245,7 @@ int main()
 		cout << "Which operation do you wish to perform?";
 		cout << " + , - , / , * , ==" << endl;
 		cin >> Operation;
-
+// check for conditions, what to do depending on chosen operation.
 		if (Operation == "+") {
 			final_answer = values_user1 + values_user2;
 		}
@@ -264,6 +269,7 @@ int main()
 		else {
 			cout << "Invalid operation." << endl;
 		}
+		// display final answer doing cout on an object. (string overload operator)
 		cout << "The answer is:" << endl << final_answer << endl;
 
 		cout << "Do you want to do more operations? (YES or NO)";
