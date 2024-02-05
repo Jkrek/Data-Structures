@@ -271,12 +271,17 @@ int main()
 		}
 		// display final answer doing cout on an object. (string overload operator)
 		cout << "The answer is:" << endl << final_answer << endl;
-
+		
+//ask the user if they want to continue, if not break the loop.
 		cout << "Do you want to do more operations? (YES or NO)";
 		string continue_operations;
 		cin >> continue_operations;
-
-		continue_operations = (continue_operations == "YES");
+		if (continue_operations == "YES") {
+			continue;
+		}
+		else {
+			break;
+		}
 
 	}
 	
