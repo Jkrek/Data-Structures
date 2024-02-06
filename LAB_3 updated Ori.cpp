@@ -199,9 +199,9 @@ bool operator==(const new_standard& arg1, const new_standard& arg2) {
 //for this ostream thing here is the source : https://stackoverflow.com/questions/28142239/overloading-ostream-operator-returning-address 
 //also https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt2
 ostream& operator<<(ostream& os, const new_standard& ans) {
-	os  << "Little: "<< ans.getLittle()
-		<< "Lots: " << ans.getLots()
-		<< "Heaps: " << ans.getHeaps();
+	os  << "Little: "<< ans.getLittle() << endl
+		<< "Lots: " << ans.getLots() <<endl
+		<< "Heaps: " << ans.getHeaps()<< endl;
 	return os;
 }
 
