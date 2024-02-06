@@ -108,7 +108,7 @@ new_standard operator-(const new_standard& arg1, const new_standard& arg2) {
 	int temp_heaps = (arg1.getHeaps() - arg2.getHeaps());
 
 	int extra_little = floor(temp_little / 7);
-	temp_lots -= extra_little;
+	temp_lots += extra_little;
 	temp_little -= extra_little * 7;
 
 	if (temp_little >= 7) {
