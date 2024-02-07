@@ -1,0 +1,185 @@
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+
+class BaseClass{
+
+
+
+
+
+    protected:
+    string Title;
+    string Description;
+
+    public:
+
+    //Constructors
+    BaseClass(string Title,string Description);
+    BaseClass();
+
+    //Getters
+    string getTitle(){
+        return Title;
+    }
+
+    string getDescription(){
+
+        return Description;
+    }
+
+
+
+    //Setters
+    void setTitle(string s){
+        Title = s;
+    }
+
+    void setDescription(string d){
+        Description = d;
+    }
+
+    //Pure Virtual Function
+    virtual void Play() = 0;
+
+
+
+
+    void Details(){
+        cout << Title << endl;
+        cout << Description << endl;
+    }
+};
+
+//TV Show class derived from base class
+class tvShow:public BaseClass{
+
+    private:
+
+        int SeasonEpisodeRunTime[5][5];
+
+    public:
+        //2d Array to store info
+        tvShow(int SeasonEpisodeRunTime[][5]){};
+
+        //getter 
+        int getSeasonEpisodeRunTime(int s, int e){
+            return SeasonEpisodeRunTime[s][e];
+        }
+
+    void Play() override{
+        int seasons;
+        int episodes;
+        
+        cout << "Enter seasons: " << endl;
+        cin >> seasons;
+        cout << "Enter episodes: " << endl;
+        cin >> episodes;
+        cout << "Runtime: " << getSeasonEpisodeRunTime(seasons, episodes) << endl;
+
+    }
+
+    //constructor
+    tvShow(string Title, string Description, int SeasonEpisodeRunTime[][5]);
+
+    //constructor for 2D array
+    tvShow(int temparray[][5]){
+        for(int i=0;i<5;i++){
+            for(int j=0;j<5;j++){
+                SeasonEpisodeRunTime[i][j]=temparray[i][j];
+            }
+        }
+    }
+
+
+
+};
+
+//Movies class derived from base class
+class Movies:public BaseClass{
+    private:
+    string OpeningCredits;
+    public:
+
+   
+    //Getter
+    string getOpeningCredits(){
+        return OpeningCredits;
+    }
+    //Setter
+    void setOpeningCredits(string OC){
+        OpeningCredits = OC;
+    }
+
+    //constructor
+    Movies(string Title, string Description, int SeasonEpisodeRunTime[][5]);
+
+    //constructor for 2D array
+    Movies(string Openingcredits){};
+
+
+    //Problem with main function not recognizing Play as member function
+    void Play() override{
+        cout << OpeningCredits;
+    }
+
+
+}; 
+
+void combinedFunction(BaseClass& myObj){
+    myObj.Play();
+    myObj.Details();
+}
+
+int main (){
+string Openingcredits;
+int choice;
+int temparray[5][5];
+
+
+
+cout << "Press 1 for instance of Movie: " << endl;
+cout << "Press 2 for an instance of TV Show" << endl;
+cout << "Press 3 for an instance of a Movie declared as a Show" << endl;
+cout << "Press 4 for an instance of a TV Show declared as a Show." << endl;
+cin >> choice;
+switch (choice) {
+    case 1:
+    cout << "Opening Credits: " << endl;
+    cin >> Openingcredits;
+
+     Movies* Movie1 = new Movies(Openingcredits);
+     combinedFunction(*Movie1)
+    
+    break;
+
+
+    case 2:
+    int seasons1;
+    int episodes1;
+    int runtime;
+    cout << "Enter number of seasons: ";
+    cin >> seasons1;
+    cout << "Enter number of episodes: ";
+    cin >> episodes1;
+    for (int i = 0; i <seasons1; i++ ){
+        for (int j = 0; j < episodes1; j++){
+            cout << "Enter the runtime for season " << i+1 << "episode" << j+1 << " : " <<endl;
+            cin >> temparray[i][j];
+
+        }
+    }
+
+    case 3:
+
+
+    case 4:
+
+
+    default:
+    cout << "Choice not valid";
+}
+    return 0;
+}
