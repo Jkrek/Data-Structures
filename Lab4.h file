@@ -1,0 +1,63 @@
+#ifndef BASECLASS_H
+#define BASECLASS_H
+#ifndef TVSHOW_H
+#define TVSHOW_H
+#ifndef MOVIES_H
+#define MOVIES_H
+
+#include "BaseClass.h"
+
+#include <string>
+using namespace std;
+class BaseClass {
+protected:
+    string Title;
+    string Description;
+
+public:
+    BaseClass();
+    BaseClass(string title, string description);
+    virtual ~BaseClass();
+
+    string getTitle() const;
+    string getDescription() const;
+
+    void setTitle(string title);
+    void setDescription(string description);
+
+    virtual void Play() = 0;
+    void Details() const;
+};
+
+class tvShow : public BaseClass {
+private:
+    int SeasonEpisodeRunTime[5][5]; 
+
+public:
+    tvShow();
+    tvShow(string title,string description, int seasonEpisodeRunTime[][5]);
+    virtual ~tvShow();
+
+    int getSeasonEpisodeRunTime(int season, int episode) const;
+    void setSeasonEpisodeRunTime(int seasonEpisodeRunTime[][5]);
+
+    void Play() override;
+};
+
+class Movies : public BaseClass {
+private:
+    string OpeningCredits;
+
+public:
+    Movies();
+    Movies(string title, string description, string openingCredits);
+    virtual ~Movies();
+
+    string getOpeningCredits() const;
+    void setOpeningCredits(string openingCredits);
+
+    void Play() override;
+};
+
+
+#endif 
