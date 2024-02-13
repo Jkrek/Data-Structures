@@ -1,14 +1,12 @@
-#ifndef BASECLASS_H
-#define BASECLASS_H
-#ifndef TVSHOW_H
-#define TVSHOW_H
-#ifndef MOVIES_H
-#define MOVIES_H
-
-#include "BaseClass.h"
+#ifndef ALLCLASSES_H  
+#define ALLCLASSES_H
 
 #include <string>
 using namespace std;
+
+
+
+//Declaration of all classes including inherited ones
 class BaseClass {
 protected:
     string Title;
@@ -35,7 +33,7 @@ private:
 
 public:
     tvShow();
-    tvShow(string title,string description, int seasonEpisodeRunTime[][5]);
+    tvShow(string title, string description, int seasonEpisodeRunTime[][5]);
     virtual ~tvShow();
 
     int getSeasonEpisodeRunTime(int season, int episode) const;
@@ -58,6 +56,9 @@ public:
 
     void Play() override;
 };
+
+#endif 
+
 
 
 #endif 
