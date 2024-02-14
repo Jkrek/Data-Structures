@@ -1,185 +1,232 @@
+#include "Lab4.h"
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 using namespace std;
 
+//////////////
+//Base Class//
+//////////////
+//Getters
+string BaseClass::getTitle() {
+  return title;
+}
+string BaseClass::getDescription() {
+  return description;
+}
+//Setters
+void BaseClass::setTitle(string t) {
+  title = t;
+}
+void BaseClass::setDescription(string d) {
+  description = d;
+}
+//Constructor for Object Initialized With Title and Description
+BaseClass::BaseClass(string t, string d){
+    title = t;
+    description = d;
+}
+//Default Constructor
+BaseClass::BaseClass(){
+    title = " ";
+    description = " ";
+}
+//Details Function Displaying Title and Description
+void BaseClass::Details(){
+  cout << "Title: " << title << endl;
+  cout << "Description: " << description << endl;
+}
 
-class BaseClass{
+///////////////
+//Movie Class//
+///////////////
+//Getter
+string Movie::getOpeningCredits(){
+  return OpeningCredits;
+}
+//Setter
+void Movie::setOpeningCredits(string OC){
+  OpeningCredits = OC;
+}
+//Constructor for Opening Credits and title/description
+Movie::Movie(string t, string d, string OC){
+  title = t;
+  description = d;
+  setOpeningCredits(OC);
+}
+//Constructor for only Opening Credits
+Movie::Movie(string OC){
+  title = " ";
+  description = " ";
+  setOpeningCredits(OC);
+}
+//Play Function Overridden to Display Opening Credits
+void Movie::Play(){
+  cout << "Opening Credits: " << OpeningCredits << endl;
+}
+//Details Function Displays Title, Description, and Opening Credits
+void Movie::Details(){
+  cout << "Title: " << title << endl;
+  cout << "Description: " << description << endl;
+  cout << "Opening Credits: " << OpeningCredits << endl;
+}
 
-
-
-
-
-    protected:
-    string Title;
-    string Description;
-
-    public:
-
-    //Constructors
-    BaseClass(string Title,string Description);
-    BaseClass();
-
-    //Getters
-    string getTitle(){
-        return Title;
+////////////////
+//TVShow Class//
+////////////////
+//Constructor for 2D array and base class
+TVShow::TVShow(string t, string d, int tempArray[][5]){
+  title = t;
+  description = d;
+  for(int i = 0; i < 5; i++){
+    for(int j = 0; j < 5; j++){
+      SeasonEpisodeRunTime[i][j] = tempArray[i][j];
     }
-
-    string getDescription(){
-
-        return Description;
+  }
+}
+//Constructor for 2D array
+TVShow::TVShow(int tempArray[][5]){
+  for(int i = 0; i < 5; i++){
+    for(int j = 0; j < 5; j++){
+      SeasonEpisodeRunTime[i][j] = tempArray[i][j];
     }
+  }
+}
+//Getter for 2D array
+int TVShow::getSeasonEpisodeRunTime(int s, int e){
+  return SeasonEpisodeRunTime[s-1][e-1];
+}
+//Play Function Overridden
+void TVShow::Play(){
+  int seasons;
+  int episodes;
+  cout << "Get Runtime From the Following: \nSeason: ";
+  cin >> seasons;
+  cout << "Episode: ";
+  cin >> episodes;
+  cout << "Runtime: " << getSeasonEpisodeRunTime(seasons, episodes) << endl;
+}
+//Details Function That Displays Title, Description, and Runtime For S1E1
+void TVShow::Details(){
+  cout << "Title: " << title << endl;
+  cout << "Description: " << description << endl;
+  cout << "S1E1 Runtime: " << getSeasonEpisodeRunTime(1, 1) << endl;
+}
 
+//////////////////////
+//Combined Functions//
+//////////////////////
+void combinedFunctionMovie(Movie myObj){
+  cout << "\n******************************************\n\n";
+  //Calls Play Function
+  cout << "Play Function: \n";
+  myObj.Play();
+  //Calls Details Function
+  cout << "\nDetails Function: \n";
+  myObj.Details();
+}
+void combinedFunctionTVShow(TVShow myObj){
+  cout << "\n******************************************\n\n";
+  //Calls Play Function
+  cout << "Play Function: \n";
+  myObj.Play();
+  //Calls Details Function
+  cout << "\nDetails Function: \n";
+  myObj.Details();
+}
 
-
-    //Setters
-    void setTitle(string s){
-        Title = s;
-    }
-
-    void setDescription(string d){
-        Description = d;
-    }
-
-    //Pure Virtual Function
-    virtual void Play() = 0;
-
-
-
-
-    void Details(){
-        cout << Title << endl;
-        cout << Description << endl;
-    }
-};
-
-//TV Show class derived from base class
-class tvShow:public BaseClass{
-
-    private:
-
-        int SeasonEpisodeRunTime[5][5];
-
-    public:
-        //2d Array to store info
-        tvShow(int SeasonEpisodeRunTime[][5]){};
-
-        //getter 
-        int getSeasonEpisodeRunTime(int s, int e){
-            return SeasonEpisodeRunTime[s][e];
-        }
-
-    void Play() override{
-        int seasons;
-        int episodes;
-        
-        cout << "Enter seasons: " << endl;
+int main() {
+  //Variable Initializations
+  int choice = 0;
+  string OpeningCredits = "";
+  int seasons = 0;
+  int episodes = 0;
+  int tempArray[5][5];
+  string title = "";
+  string description = "";
+  bool run = true;
+  TVShow tvShow1(tempArray);
+  TVShow tvShow2(title, description, tempArray);
+  Movie movie1(OpeningCredits);
+  Movie movie2(title, description, OpeningCredits);
+  //Code Loop
+  while (run == true){
+    cout << "\n******************************************\n\n";
+    cout << "Choose one of the following: \n1: Movie" << endl;
+    cout << "2: TVShow" << endl;
+    cout << "3: Instance of a Movie declared as a Show" << endl;
+    cout << "4: Instance of a TVShow declared as a Show\n>> ";
+    cin >> choice;
+    cout << "\n******************************************\n\n";
+    //Switch Statement For Choice
+    switch(choice){
+      //Instance of Movie
+      case 1:
+        cin.ignore();
+        cout << "Opening Credits: ";
+        getline(cin, OpeningCredits);
+        movie1 = Movie(OpeningCredits);
+        combinedFunctionMovie(movie1);
+        break;
+      //Instance of TVShow
+      case 2:
+        cout << "Number of Seasons: "; 
         cin >> seasons;
-        cout << "Enter episodes: " << endl;
+        cout << "Number of Episodes: "; 
         cin >> episodes;
-        cout << "Runtime: " << getSeasonEpisodeRunTime(seasons, episodes) << endl;
-
-    }
-
-    //constructor
-    tvShow(string Title, string Description, int SeasonEpisodeRunTime[][5]);
-
-    //constructor for 2D array
-    tvShow(int temparray[][5]){
-        for(int i=0;i<5;i++){
-            for(int j=0;j<5;j++){
-                SeasonEpisodeRunTime[i][j]=temparray[i][j];
-            }
+        cout << endl;
+        for (int i = 0; i < seasons; i++){
+          for (int j = 0; j < episodes; j++){
+            cout << "Runtime for Season " << i + 1 << " Episode " << j + 1 << ": ";
+            cin >> tempArray[i][j];
+          }
         }
-    }
-
-
-
-};
-
-//Movies class derived from base class
-class Movies:public BaseClass{
-    private:
-    string OpeningCredits;
-    public:
-
-   
-    //Getter
-    string getOpeningCredits(){
-        return OpeningCredits;
-    }
-    //Setter
-    void setOpeningCredits(string OC){
-        OpeningCredits = OC;
-    }
-
-    //constructor
-    Movies(string Title, string Description, int SeasonEpisodeRunTime[][5]);
-
-    //constructor for 2D array
-    Movies(string Openingcredits){};
-
-
-    //Problem with main function not recognizing Play as member function
-    void Play() override{
-        cout << OpeningCredits;
-    }
-
-
-}; 
-
-void combinedFunction(BaseClass& myObj){
-    myObj.Play();
-    myObj.Details();
-}
-
-int main (){
-string Openingcredits;
-int choice;
-int temparray[5][5];
-
-
-
-cout << "Press 1 for instance of Movie: " << endl;
-cout << "Press 2 for an instance of TV Show" << endl;
-cout << "Press 3 for an instance of a Movie declared as a Show" << endl;
-cout << "Press 4 for an instance of a TV Show declared as a Show." << endl;
-cin >> choice;
-switch (choice) {
-    case 1:
-    cout << "Opening Credits: " << endl;
-    cin >> Openingcredits;
-
-     Movies* Movie1 = new Movies(Openingcredits);
-     combinedFunction(*Movie1)
-    
-    break;
-
-
-    case 2:
-    int seasons1;
-    int episodes1;
-    int runtime;
-    cout << "Enter number of seasons: ";
-    cin >> seasons1;
-    cout << "Enter number of episodes: ";
-    cin >> episodes1;
-    for (int i = 0; i <seasons1; i++ ){
-        for (int j = 0; j < episodes1; j++){
-            cout << "Enter the runtime for season " << i+1 << "episode" << j+1 << " : " <<endl;
-            cin >> temparray[i][j];
-
+        tvShow1 = TVShow(tempArray);
+        combinedFunctionTVShow(tvShow1);
+        break;
+      //Instance of Movie declared as a Show
+      case 3:
+        cin.ignore();
+        cout << "Title: "; 
+        getline(cin, title);
+        cout << "Description: ";
+        getline(cin, description);
+        cout << "Opening Credits: ";
+        getline(cin, OpeningCredits);
+        movie2 = Movie(title, description, OpeningCredits);
+        combinedFunctionMovie(movie2);
+        break;
+      //Instance of TVShow declared as a Show
+      case 4:
+        cin.ignore();
+        cout << "Title: ";
+        getline(cin, title);
+        cout << "Description: ";
+        getline(cin, description);
+        cout << "Number of Seasons: ";
+        cin >> seasons;
+        cout << "Number of Episodes: ";
+        cin >> episodes;
+        cout << endl;
+        for (int i = 0; i < seasons; i++){
+          for (int j = 0; j < episodes; j++){
+            cout << "Runtime for Season " << i + 1 << " Episode " << j + 1 << ": ";
+            cin >> tempArray[i][j];
+          }
         }
+        tvShow2 = TVShow(title, description, tempArray);
+        combinedFunctionTVShow(tvShow2);
+        break;
+      //If the Choice is Invalid
+      default:
+        cout << "Invalid Choice." << endl;
     }
-
-    case 3:
-
-
-    case 4:
-
-
-    default:
-    cout << "Choice not valid";
-}
-    return 0;
+    //Asks the user if they want to continue
+    cout << "\n******************************************\n\n";
+    cout << "Continue? (1 for Yes, 0 for No): ";
+    cin >> run;
+  }
+  //Ends program
+  cout << "\nThanks for using the program!" << endl;
 }
